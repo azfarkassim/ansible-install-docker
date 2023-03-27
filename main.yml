@@ -1,0 +1,31 @@
+---
+
+- hosts: all
+  become: true
+  tasks:
+    - name: update packages
+      yum:
+        name: '*'
+        state: latest
+        update_only: true
+
+    - name: install yum packages
+      yum:
+        name:
+          - docker
+          - device-mapper-persistent-data
+          - lvm2
+          - python-pip
+        state: present
+
+    - name: Add remote ec2 user to docker group
+      user:
+        name: ec2-user
+        groups: docker
+        append: yes
+
+    - name: Enable on boot and start service
+      service:
+        name: docker.service
+        enabled: True
+        state: started
