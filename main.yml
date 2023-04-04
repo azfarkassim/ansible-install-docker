@@ -17,14 +17,18 @@
           - lvm2
           - python-pip
         state: present
+      notify:
+          - add user
+          - start docker
 
-    - name: Add remote ec2 user to docker group
+  handlers:
+    - name: add user
       user:
         name: ec2-user
         groups: docker
         append: yes
 
-    - name: Enable on boot and start service
+    - name: start docker
       service:
         name: docker.service
         enabled: True
